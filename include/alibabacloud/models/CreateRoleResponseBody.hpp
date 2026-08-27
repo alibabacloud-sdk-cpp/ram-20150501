@@ -34,6 +34,7 @@ namespace Models
     class Role : public Darabonba::Model {
     public:
       friend void to_json(Darabonba::Json& j, const Role& obj) { 
+        DARABONBA_PTR_TO_JSON(AllowConsoleLogin, allowConsoleLogin_);
         DARABONBA_PTR_TO_JSON(Arn, arn_);
         DARABONBA_PTR_TO_JSON(AssumeRolePolicyDocument, assumeRolePolicyDocument_);
         DARABONBA_PTR_TO_JSON(CreateDate, createDate_);
@@ -43,6 +44,7 @@ namespace Models
         DARABONBA_PTR_TO_JSON(RoleName, roleName_);
       };
       friend void from_json(const Darabonba::Json& j, Role& obj) { 
+        DARABONBA_PTR_FROM_JSON(AllowConsoleLogin, allowConsoleLogin_);
         DARABONBA_PTR_FROM_JSON(Arn, arn_);
         DARABONBA_PTR_FROM_JSON(AssumeRolePolicyDocument, assumeRolePolicyDocument_);
         DARABONBA_PTR_FROM_JSON(CreateDate, createDate_);
@@ -62,9 +64,16 @@ namespace Models
       };
       virtual void fromMap(const Darabonba::Json &obj) override { from_json(obj, *this); validate(); };
       virtual Darabonba::Json toMap() const override { Darabonba::Json obj; to_json(obj, *this); return obj; };
-      virtual bool empty() const override { return this->arn_ == nullptr
-        && this->assumeRolePolicyDocument_ == nullptr && this->createDate_ == nullptr && this->description_ == nullptr && this->maxSessionDuration_ == nullptr && this->roleId_ == nullptr
-        && this->roleName_ == nullptr; };
+      virtual bool empty() const override { return this->allowConsoleLogin_ == nullptr
+        && this->arn_ == nullptr && this->assumeRolePolicyDocument_ == nullptr && this->createDate_ == nullptr && this->description_ == nullptr && this->maxSessionDuration_ == nullptr
+        && this->roleId_ == nullptr && this->roleName_ == nullptr; };
+      // allowConsoleLogin Field Functions 
+      bool hasAllowConsoleLogin() const { return this->allowConsoleLogin_ != nullptr;};
+      void deleteAllowConsoleLogin() { this->allowConsoleLogin_ = nullptr;};
+      inline bool getAllowConsoleLogin() const { DARABONBA_PTR_GET_DEFAULT(allowConsoleLogin_, false) };
+      inline Role& setAllowConsoleLogin(bool allowConsoleLogin) { DARABONBA_PTR_SET_VALUE(allowConsoleLogin_, allowConsoleLogin) };
+
+
       // arn Field Functions 
       bool hasArn() const { return this->arn_ != nullptr;};
       void deleteArn() { this->arn_ = nullptr;};
@@ -115,15 +124,17 @@ namespace Models
 
 
     protected:
-      // The Alibaba Cloud Resource Name (ARN) of the RAM role.
+      // Indicates whether console logon is allowed for the RAM role.
+      shared_ptr<bool> allowConsoleLogin_ {};
+      // The resource descriptor of the RAM role.
       shared_ptr<string> arn_ {};
-      // The trust policy that specifies the trusted entity to assume the RAM role.
+      // The trust policy of the RAM role.
       shared_ptr<string> assumeRolePolicyDocument_ {};
       // The time when the RAM role was created.
       shared_ptr<string> createDate_ {};
       // The description of the RAM role.
       shared_ptr<string> description_ {};
-      // The maximum session time of the RAM role.
+      // The maximum session duration of the RAM role.
       shared_ptr<int64_t> maxSessionDuration_ {};
       // The ID of the RAM role.
       shared_ptr<string> roleId_ {};
